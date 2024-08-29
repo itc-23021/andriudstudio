@@ -1,0 +1,30 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="jp.ac.it_college.std.s23021.kadai">
+
+    <!-- インターネットの使用を許可するパーミッション -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- アプリケーション全体の設定 -->
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Kadai">
+
+        <!-- メインアクティビティ -->
+        <activity android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- ポケモン詳細アクティビティ -->
+        <activity android:name=".PokemonDetailActivity" />
+
+    </application>
+
+</manifest>

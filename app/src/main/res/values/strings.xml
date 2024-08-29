@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ポケモン図鑑</string>
+    <string name="pokemon_name">名前: %1$s</string>
+    <string name="pokemon_id">ID: %1$d</string>
+    <string name="pokemon_height">高さ: %1$d</string>
+    <string name="pokemon_weight">体重: %1$d</string>
+    <string name="data_retrieval_failed">データの取得に失敗しました</string>
+</resources>
