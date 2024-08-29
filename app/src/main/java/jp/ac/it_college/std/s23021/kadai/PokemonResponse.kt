@@ -17,3 +17,16 @@ data class PokemonListItem(
     val name: String,
     val url: String
 )
+data class PokemonSpeciesResponse(
+    val names: List<NameInfo>
+)
+
+data class NameInfo(
+    val name: String,
+    val language: LanguageInfo
+)
+
+data class LanguageInfo(
+    val name: String
+)
+

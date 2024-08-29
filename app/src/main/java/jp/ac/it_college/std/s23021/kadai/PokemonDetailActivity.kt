@@ -47,7 +47,8 @@ class PokemonDetailActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val pokemon = response.body()
                     pokemon?.let {
-                        val info = "名前: ${it.name.capitalize()}\n" +
+                        val japaneseName = pokemonNameMap[name.toLowerCase()] ?: "日本語名不明"
+                        val info = "名前: ${japaneseName}\n" +
                                 "ID: ${it.id}\n" +
                                 "高さ: ${it.height}\n" +
                                 "体重: ${it.weight}"

@@ -1,12 +1,11 @@
 package jp.ac.it_college.std.s23021.kadai
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import jp.ac.it_college.std.s23021.kadai.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,18 +14,16 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var ivPokemonSprite: ImageView
+    private lateinit var tvPokemonInfo: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-
-        enableEdgeToEdge()
         setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        ivPokemonSprite = findViewById(R.id.ivPokemonSprite)
+        tvPokemonInfo = findViewById(R.id.tvPokemonInfo)
 
         // RecyclerView の設定
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -49,10 +46,7 @@ class MainActivity : AppCompatActivity() {
                             PokemonListItem(name = result.name, url = result.url)
                         }
                         binding.recyclerView.adapter = PokemonListAdapter(pokemonListItems) { pokemon ->
-                            val intent = Intent(this@MainActivity, PokemonDetailActivity::class.java).apply {
-                                putExtra("pokemon_name", pokemon.name)
-                            }
-                            startActivity(intent)
+                            showPokemonDetails(pokemon.name)
                         }
                     }
                 }
@@ -60,6 +54,39 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFailure(call: Call<PokemonListResponse>, t: Throwable) {
                 t.printStackTrace()
+            }
+        })
+    }
+
+    private fun showPokemonDetails(name: String) {
+        val service = RetrofitClient.instance.create(PokeApiService::class.java)
+        service.getPokemonInfo(name).enqueue(object : Callback<PokemonResponse> {
+            override fun onResponse(
+                call: Call<PokemonResponse>,
+                response: Response<PokemonResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val pokemon = response.body()
+                    pokemon?.let {
+                        val info = "名前: ${it.name.capitalize()}\n" +
+                                "ID: ${it.id}\n" +
+                                "高さ: ${it.height}\n" +
+                                "体重: ${it.weight}"
+                        tvPokemonInfo.text = info
+                        Glide.with(this@MainActivity)
+                            .load(it.sprites.front_default)
+                            .into(ivPokemonSprite)
+
+                        // ポケモンの詳細セクションを表示
+                        binding.pokemonDetailSection.visibility = android.view.View.VISIBLE
+                    }
+                } else {
+                    tvPokemonInfo.text = "データの取得に失敗しました"
+                }
+            }
+
+            override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
+                tvPokemonInfo.text = t.message
             }
         })
     }
