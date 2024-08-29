@@ -4,18 +4,51 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvPokemonInfo"
-        android:layout_width="wrap_content"
+    <!-- ポケモンの基本情報と種族値を表示するためのLinearLayout -->
+    <LinearLayout
+        android:id="@+id/linearLayoutInfo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:textSize="18sp"
-        android:textColor="@android:color/black" />
+        android:orientation="horizontal">
 
+        <!-- 左側に名前、ID、高さ、体重を表示 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPokemonBasicInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+
+        <!-- 右側に種族値を表示 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvPokemonStats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ポケモンの画像を表示 -->
     <ImageView
         android:id="@+id/ivPokemonSprite"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_gravity="center_horizontal" />
-
+        android:layout_below="@id/linearLayoutInfo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/pokemon_image" />
 </RelativeLayout>

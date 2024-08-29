@@ -2,6 +2,7 @@ package jp.ac.it_college.std.s23021.kadai
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvPokemonInfo: TextView
     private lateinit var btnNextPage: Button
     private lateinit var btnPreviousPage: Button
+    private lateinit var btnSearch: Button
+    private lateinit var etSearch: EditText
 
     private var currentOffset = 0
     private val limit = 10
@@ -32,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         tvPokemonInfo = findViewById(R.id.tvPokemonInfo)
         btnNextPage = findViewById(R.id.btnNextPage)
         btnPreviousPage = findViewById(R.id.btnPreviousPage)
+        btnSearch = findViewById(R.id.btnSearch)
+        etSearch = findViewById(R.id.etSearch)
 
         // RecyclerView の設定
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
@@ -50,6 +55,16 @@ class MainActivity : AppCompatActivity() {
             if (currentOffset >= limit) {
                 currentOffset -= limit
                 fetchPokemonList()
+            }
+        }
+
+        // 検索ボタンのクリックリスナーを設定
+        btnSearch.setOnClickListener {
+            val query = etSearch.text.toString().trim()
+            if (query.isNotEmpty()) {
+                searchPokemon(query)
+            } else {
+                tvPokemonInfo.text = "ポケモン名を入力してください"
             }
         }
 
@@ -116,6 +131,10 @@ class MainActivity : AppCompatActivity() {
                 tvPokemonInfo.text = t.message
             }
         })
+    }
+
+    private fun searchPokemon(name: String) {
+        showPokemonDetails(name)
     }
 
     private fun updateButtonStates() {

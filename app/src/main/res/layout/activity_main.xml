@@ -6,12 +6,26 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!-- 検索バー -->
-    <EditText
-        android:id="@+id/etSearch"
+    <!-- 検索バーと検索ボタンを横並びに配置 -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ポケモンを検索" />
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ポケモンを検索" />
+
+        <Button
+            android:id="@+id/btnSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="検索" />
+    </LinearLayout>
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
@@ -63,8 +77,6 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:paddingTop="8dp" />
-
-
 
     </LinearLayout>
 
