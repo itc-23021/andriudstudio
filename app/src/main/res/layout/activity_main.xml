@@ -20,6 +20,28 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!-- ナビゲーションボタン -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPreviousPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="戻る" />
+
+        <Button
+            android:id="@+id/btnNextPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="次へ" />
+
+    </LinearLayout>
+
     <!-- ポケモンの詳細と画像を表示するセクション -->
     <LinearLayout
         android:id="@+id/pokemonDetailSection"
@@ -41,6 +63,8 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:paddingTop="8dp" />
+
+
 
     </LinearLayout>
 

@@ -9,6 +9,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class PokemonDetailActivity : AppCompatActivity() {
 
     private lateinit var tvPokemonInfo: TextView
@@ -23,6 +24,8 @@ class PokemonDetailActivity : AppCompatActivity() {
         "charizard" to "リザードン"
         // 他のポケモンも追加
     )
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +50,23 @@ class PokemonDetailActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val pokemon = response.body()
                     pokemon?.let {
+                        val hp = it.stats.firstOrNull { stat -> stat.stat.name == "hp" }?.base_stat ?: 0
+                        val attack = it.stats.firstOrNull { stat -> stat.stat.name == "attack" }?.base_stat ?: 0
+                        val defense = it.stats.firstOrNull { stat -> stat.stat.name == "defense" }?.base_stat ?: 0
+                        val specialAttack = it.stats.firstOrNull { stat -> stat.stat.name == "special-attack" }?.base_stat ?: 0
+                        val specialDefense = it.stats.firstOrNull { stat -> stat.stat.name == "special-defense" }?.base_stat ?: 0
+
                         val japaneseName = pokemonNameMap[name.toLowerCase()] ?: "日本語名不明"
-                        val info = "名前: ${japaneseName}\n" +
+                        val info = "名前: $japaneseName\n" +
                                 "ID: ${it.id}\n" +
                                 "高さ: ${it.height}\n" +
-                                "体重: ${it.weight}"
+                                "体重: ${it.weight}\n" +
+                                "HP: $hp\n" +
+                                "攻撃: $attack\n" +
+                                "防御: $defense\n" +
+                                "特攻: $specialAttack\n" +
+                                "特防: $specialDefense"
+
                         tvPokemonInfo.text = info
                         Glide.with(this@PokemonDetailActivity)
                             .load(it.sprites.front_default)

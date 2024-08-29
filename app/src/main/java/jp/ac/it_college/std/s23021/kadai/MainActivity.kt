@@ -1,6 +1,7 @@
 package jp.ac.it_college.std.s23021.kadai
 
 import android.os.Bundle
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var ivPokemonSprite: ImageView
     private lateinit var tvPokemonInfo: TextView
+    private lateinit var btnNextPage: Button
+    private lateinit var btnPreviousPage: Button
+
+    private var currentOffset = 0
+    private val limit = 10
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,17 +30,36 @@ class MainActivity : AppCompatActivity() {
 
         ivPokemonSprite = findViewById(R.id.ivPokemonSprite)
         tvPokemonInfo = findViewById(R.id.tvPokemonInfo)
+        btnNextPage = findViewById(R.id.btnNextPage)
+        btnPreviousPage = findViewById(R.id.btnPreviousPage)
 
         // RecyclerView の設定
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // ポケモンリストを取得して表示
+        // 初期ページのポケモンリストを取得して表示
         fetchPokemonList()
+
+        // 「次へ」ボタンの設定
+        btnNextPage.setOnClickListener {
+            currentOffset += limit
+            fetchPokemonList()
+        }
+
+        // 「戻る」ボタンの設定
+        btnPreviousPage.setOnClickListener {
+            if (currentOffset >= limit) {
+                currentOffset -= limit
+                fetchPokemonList()
+            }
+        }
+
+        // 「戻る」ボタンの無効化を管理
+        updateButtonStates()
     }
 
     private fun fetchPokemonList() {
         val service = RetrofitClient.instance.create(PokeApiService::class.java)
-        service.getPokemonList(limit = 10, offset = 0).enqueue(object : Callback<PokemonListResponse> {
+        service.getPokemonList(limit = limit, offset = currentOffset).enqueue(object : Callback<PokemonListResponse> {
             override fun onResponse(
                 call: Call<PokemonListResponse>,
                 response: Response<PokemonListResponse>
@@ -48,6 +73,8 @@ class MainActivity : AppCompatActivity() {
                         binding.recyclerView.adapter = PokemonListAdapter(pokemonListItems) { pokemon ->
                             showPokemonDetails(pokemon.name)
                         }
+                        // ボタンの状態を更新
+                        updateButtonStates()
                     }
                 }
             }
@@ -89,5 +116,9 @@ class MainActivity : AppCompatActivity() {
                 tvPokemonInfo.text = t.message
             }
         })
+    }
+
+    private fun updateButtonStates() {
+        btnPreviousPage.isEnabled = currentOffset > 0
     }
 }

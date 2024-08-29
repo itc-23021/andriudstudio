@@ -6,7 +6,17 @@ data class PokemonResponse(
     val height: Int,
     val weight: Int,
     val sprites: Sprites,
-    val results: Any
+    val results: Sprites,
+    val stats: List<PokemonStat>
+)
+
+data class PokemonStat(
+    val base_stat: Int,
+    val stat: Stat
+)
+
+data class Stat(
+    val name: String
 )
 
 
