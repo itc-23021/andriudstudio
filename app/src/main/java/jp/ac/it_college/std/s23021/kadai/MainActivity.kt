@@ -3,6 +3,7 @@ package jp.ac.it_college.std.s23021.kadai
 import PokemonListItem
 import PokemonResponse
 import PokemonSpeciesResponse
+import android.os.Build.ID
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -205,6 +206,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun searchPokemon(name: String) {
         showPokemonDetails(name)
+        showPokemonDetails(ID)
     }
 
     private fun updateButtonStates() {
