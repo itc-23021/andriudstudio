@@ -86,11 +86,37 @@ class MainActivity : AppCompatActivity() {
                     val pokemonListResponse = response.body()
                     pokemonListResponse?.let {
                         val pokemonListItems = it.results.map { result ->
-                            PokemonListItem(name = result.name, url = result.url)
+                            // ここで日本語名を取得する
+                            val item = PokemonListItem(name = result.name, url = result.url)
+                            service.getPokemonSpecies(result.name).enqueue(object : Callback<PokemonSpeciesResponse> {
+                                override fun onResponse(
+                                    call: Call<PokemonSpeciesResponse>,
+                                    response: Response<PokemonSpeciesResponse>
+                                ) {
+                                    if (response.isSuccessful) {
+                                        val species = response.body()
+                                        species?.let {
+                                            val japaneseName = it.names.find { nameInfo ->
+                                                nameInfo.language.name == "ja-Hrkt"
+                                            }?.name
+                                            item.japaneseName = japaneseName ?: result.name.capitalize()
+                                        }
+                                        // アダプタに通知して表示を更新
+                                        binding.recyclerView.adapter?.notifyDataSetChanged()
+                                    }
+                                }
+
+                                override fun onFailure(call: Call<PokemonSpeciesResponse>, t: Throwable) {
+                                    t.printStackTrace()
+                                }
+                            })
+                            item
                         }
+
                         binding.recyclerView.adapter = PokemonListAdapter(pokemonListItems) { pokemon ->
                             showPokemonDetails(pokemon.name)
                         }
+
                         // ボタンの状態を更新
                         updateButtonStates()
                     }
@@ -102,6 +128,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun showPokemonDetails(name: String) {
         val service = RetrofitClient.instance.create(PokeApiService::class.java)

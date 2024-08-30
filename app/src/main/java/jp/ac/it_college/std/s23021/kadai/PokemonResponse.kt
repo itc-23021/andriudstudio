@@ -22,7 +22,8 @@ data class Sprites(
 
 data class PokemonListItem(
     val name: String,
-    val url: String
+    val url: String,
+    var japaneseName: String? = null
 )
 
 data class PokemonSpeciesResponse(

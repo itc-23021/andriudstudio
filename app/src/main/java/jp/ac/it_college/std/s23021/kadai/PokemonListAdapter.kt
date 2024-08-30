@@ -26,7 +26,7 @@ class PokemonListAdapter(
 
     class PokemonViewHolder(private val binding: ItemPokemonBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(pokemon: PokemonListItem) {
-            binding.pokemonName.text = pokemon.name
+            binding.pokemonName.text = pokemon.japaneseName
         }
     }
 }
