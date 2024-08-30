@@ -1,5 +1,6 @@
 package jp.ac.it_college.std.s23021.kadai
 
+import PokemonResponse
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView

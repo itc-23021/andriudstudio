@@ -1,12 +1,9 @@
-package jp.ac.it_college.std.s23021.kadai
-
 data class PokemonResponse(
     val name: String,
     val id: Int,
     val height: Int,
     val weight: Int,
     val sprites: Sprites,
-    val results: Sprites,
     val stats: List<PokemonStat>
 )
 
@@ -19,16 +16,18 @@ data class Stat(
     val name: String
 )
 
-
 data class Sprites(
     val front_default: String
 )
+
 data class PokemonListItem(
     val name: String,
     val url: String
 )
+
 data class PokemonSpeciesResponse(
-    val names: List<NameInfo>
+    val names: List<NameInfo>,
+    val flavor_text_entries: List<FlavorTextEntry>
 )
 
 data class NameInfo(
@@ -40,3 +39,7 @@ data class LanguageInfo(
     val name: String
 )
 
+data class FlavorTextEntry(
+    val flavor_text: String,
+    val language: LanguageInfo
+)

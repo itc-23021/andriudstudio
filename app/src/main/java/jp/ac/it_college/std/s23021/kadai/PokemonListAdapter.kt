@@ -1,5 +1,6 @@
 package jp.ac.it_college.std.s23021.kadai
 
+import PokemonListItem
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

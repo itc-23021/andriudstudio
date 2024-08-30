@@ -1,5 +1,8 @@
 package jp.ac.it_college.std.s23021.kadai
 
+import PokemonListItem
+import PokemonResponse
+import PokemonSpeciesResponse
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -102,6 +105,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPokemonDetails(name: String) {
         val service = RetrofitClient.instance.create(PokeApiService::class.java)
+
+        // ポケモン基本情報の取得
         service.getPokemonInfo(name).enqueue(object : Callback<PokemonResponse> {
             override fun onResponse(
                 call: Call<PokemonResponse>,
@@ -119,6 +124,9 @@ class MainActivity : AppCompatActivity() {
                             .load(it.sprites.front_default)
                             .into(ivPokemonSprite)
 
+                        // ポケモンの種別情報を取得して日本語の名前とフレーバーテキストを表示
+                        fetchPokemonSpecies(it.id)
+
                         // ポケモンの詳細セクションを表示
                         binding.pokemonDetailSection.visibility = android.view.View.VISIBLE
                     }
@@ -128,6 +136,41 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<PokemonResponse>, t: Throwable) {
+                tvPokemonInfo.text = t.message
+            }
+        })
+    }
+
+    private fun fetchPokemonSpecies(id: Int) {
+        val service = RetrofitClient.instance.create(PokeApiService::class.java)
+        service.getPokemonSpecies(id.toString()).enqueue(object : Callback<PokemonSpeciesResponse> {
+            override fun onResponse(
+                call: Call<PokemonSpeciesResponse>,
+                response: Response<PokemonSpeciesResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val species = response.body()
+                    species?.let {
+                        // 日本語の名前を取得
+                        val japaneseName = it.names.find { nameInfo ->
+                            nameInfo.language.name == "ja-Hrkt"
+                        }?.name
+
+                        // 日本語のフレーバーテキストを取得
+                        val flavorText = it.flavor_text_entries.find { entry ->
+                            entry.language.name == "ja-Hrkt"
+                        }?.flavor_text
+
+                        // 画面に表示
+                        val info = "${tvPokemonInfo.text}\n日本語名: $japaneseName\n説明: $flavorText"
+                        tvPokemonInfo.text = info
+                    }
+                } else {
+                    tvPokemonInfo.text = "種別データの取得に失敗しました"
+                }
+            }
+
+            override fun onFailure(call: Call<PokemonSpeciesResponse>, t: Throwable) {
                 tvPokemonInfo.text = t.message
             }
         })
